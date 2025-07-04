@@ -44,7 +44,7 @@ if not firebase_admin._apps:
 
 # ------------------ Sidebar Alert Config ------------------
 if "enable_alerts" not in st.session_state:
-    st.session_state.enable_alerts = True
+    st.session_state.enable_alerts = False
 
 with st.sidebar:
     st.markdown("### 🔔 Alert Settings")
