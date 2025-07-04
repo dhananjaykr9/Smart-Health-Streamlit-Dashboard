@@ -103,14 +103,12 @@ if not df.empty:
         for alert in alerts:
             st.warning(alert)
 
-        # -------- Local Alarm Sound --------
-        alarm_path = "assets/alarm-siren.mp3"
-        with open(alarm_path, "rb") as f:
-            alarm_base64 = base64.b64encode(f.read()).decode()
+        # -------- Online Alarm Sound --------
+        alarm_url = "https://raw.githubusercontent.com/dhananjaykr9/Smart-Health-Streamlit-Dashboard/main/streamlit_dashboard/assets/alarm-siren.mp3"
 
         st.markdown(f"""
             <audio autoplay>
-                <source src="data:audio/mp3;base64,{alarm_base64}" type="audio/mp3">
+                <source src="{alarm_url}" type="audio/mp3">
             </audio>
             <script>
                 window.onload = function() {{
@@ -128,6 +126,7 @@ if not df.empty:
             st.info("⚠️ Alerts detected but notifications are disabled.")
     else:
         st.success("✅ All vitals are in healthy range.")
+
 else:
     st.warning("⚠️ No data from Firebase yet. Check if ESP32 is pushing data.")
 
