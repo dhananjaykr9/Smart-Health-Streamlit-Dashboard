@@ -11,7 +11,7 @@ from streamlit_extras.switch_page_button import switch_page
 
 # ---------- Auth Check ----------
 if "user" not in st.session_state or st.session_state["user"] is None:
-    st.warning("🔐 Please login first.")
+    st.warning("🔐 Please login to access the dashboard.")
     st.stop()
 
 # ---------- Logout Button Top-Right ----------
