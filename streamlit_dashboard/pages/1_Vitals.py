@@ -152,8 +152,8 @@ if not df.empty:
     st.plotly_chart(fig4, use_container_width=True)
 
 # ------------------ Data Table ------------------
-st.markdown("### 📋 Latest Data Table")
-st.dataframe(df.tail(50), use_container_width=True)
+#st.markdown("### 📋 Latest Data Table")
+#st.dataframe(df.tail(50), use_container_width=True)
 
 # ------------------ CSV Export ------------------
 st.download_button(
