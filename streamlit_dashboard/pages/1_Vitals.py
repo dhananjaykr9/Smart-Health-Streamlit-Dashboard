@@ -29,37 +29,21 @@ st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True)
 # ----------- Firebase Setup -----------
 if not firebase_admin._apps:
     cred = credentials.Certificate({
-        "type": st.secrets["FIREBASE_TYPE"],
-        "project_id": st.secrets["FIREBASE_PROJECT_ID"],
-        "private_key_id": st.secrets["FIREBASE_PRIVATE_KEY_ID"],
-        "private_key": st.secrets["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n"),
-        "client_email": st.secrets["FIREBASE_CLIENT_EMAIL"],
-        "client_id": st.secrets["FIREBASE_CLIENT_ID"],
-        "auth_uri": st.secrets["FIREBASE_AUTH_URI"],
-        "token_uri": st.secrets["FIREBASE_TOKEN_URI"],
-        "auth_provider_x509_cert_url": st.secrets["FIREBASE_AUTH_PROVIDER_X509_CERT_URL"],
-        "client_x509_cert_url": st.secrets["FIREBASE_CLIENT_X509_CERT_URL"]
+    "type": st.secrets["FIREBASE_TYPE"],
+    "project_id": st.secrets["FIREBASE_PROJECT_ID"],
+    "private_key_id": st.secrets["FIREBASE_PRIVATE_KEY_ID"],
+    "private_key": st.secrets["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n"),
+    "client_email": st.secrets["FIREBASE_CLIENT_EMAIL"],
+    "client_id": st.secrets["FIREBASE_CLIENT_ID"],
+    "auth_uri": st.secrets["FIREBASE_AUTH_URI"],
+    "token_uri": st.secrets["FIREBASE_TOKEN_URI"],
+    "auth_provider_x509_cert_url": st.secrets["FIREBASE_AUTH_PROVIDER_X509_CERT_URL"],
+    "client_x509_cert_url": st.secrets["FIREBASE_CLIENT_X509_CERT_URL"]
+}) # Ensure this file is present
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': st.secrets["FIREBASE_DB_URL"]
     })
-    initialize_app(cred, {'databaseURL': st.secrets["FIREBASE_DB_URL"]})
 
-# ------------------ Sidebar Alert Config ------------------
-if "enable_alerts" not in st.session_state:
-    st.session_state.enable_alerts = False
-
-with st.sidebar:
-    st.markdown("### 🔔 Alert Settings")
-    toggle = st.toggle("Enable SMS/Email Alerts", value=st.session_state.enable_alerts)
-    st.session_state.enable_alerts = toggle
-
-    st.markdown("---")
-    st.markdown("### ⚙️ Alert Thresholds")
-
-    thresholds = {
-        "hr_min": st.number_input("Min Heart Rate (BPM)", min_value=30, max_value=100, value=60, key="hr_min"),
-        "hr_max": st.number_input("Max Heart Rate (BPM)", min_value=100, max_value=200, value=120, key="hr_max"),
-        "spo2_min": st.number_input("Min SpO₂ (%)", min_value=80, max_value=100, value=95, key="spo2_min"),
-        "body_temp_max": st.number_input("Max Body Temp (°C)", min_value=35.0, max_value=42.0, value=37.5, key="body_temp_max")
-    }
 
 
 # ----------- Fetch Firebase Data -----------
@@ -76,8 +60,37 @@ if raw_data:
 if records:
     df = pd.DataFrame(records)
     df = df.sort_values(by="Time")
-else:
-    df = pd.DataFrame(columns=["Time", "HeartRate", "Sp02", "BodyTemp", "RoomTemp", "Humidity"])
+    # Convert to datetime
+    df['Time'] = pd.to_datetime(df['Time'], errors='coerce')
+
+# ------------------- SIDEBAR -------------------
+with st.sidebar:
+    st.markdown("## ⚙️ Settings")
+
+    st.markdown("### ⏱️ View Time Range")
+    hours = st.slider("Show data for past N hours", min_value=0, max_value=24, value=1, step=1)
+
+    st.markdown("### 🔔 Alert Settings")
+    toggle = st.toggle("Enable SMS/Email Alerts", value=st.session_state.get("enable_alerts", True))
+    st.session_state.enable_alerts = toggle
+
+    st.markdown("---")
+    st.markdown("### 📊 Alert Thresholds")
+    thresholds = {
+        "hr_min": st.number_input("Min Heart Rate (BPM)", min_value=30, max_value=100, value=60, key="hr_min"),
+        "hr_max": st.number_input("Max Heart Rate (BPM)", min_value=100, max_value=200, value=120, key="hr_max"),
+        "spo2_min": st.number_input("Min SpO₂ (%)", min_value=80, max_value=100, value=95, key="spo2_min"),
+        "body_temp_max": st.number_input("Max Body Temp (°C)", min_value=35.0, max_value=42.0, value=37.5, key="body_temp_max")
+    }
+
+# ------------------- DATA FILTERING -------------------
+df = pd.DataFrame(records).sort_values(by="Time") if records else pd.DataFrame(columns=["Time", "HeartRate", "Sp02", "BodyTemp", "RoomTemp", "Humidity"])
+
+if not df.empty:
+    df['Time'] = pd.to_datetime(df['Time'], errors='coerce')
+    now = pd.Timestamp.now()
+    df = df[df['Time'] >= (now - pd.Timedelta(hours=hours))]
+
 
 # ----------- Display Current Vitals -----------
 st.markdown("### 🧾 Current Vitals Summary")
@@ -156,12 +169,12 @@ if not df.empty:
 #st.dataframe(df.tail(50), use_container_width=True)
 
 # ------------------ CSV Export ------------------
-st.download_button(
-    label="📥 Download Full Vitals CSV",
-    data=df.to_csv(index=False),
-    file_name="realtime_vitals_data.csv",
-    mime="text/csv"
-)
+#st.download_button(
+#    label="📥 Download Full Vitals CSV",
+#    data=df.to_csv(index=False),
+#    file_name="realtime_vitals_data.csv",
+#    mime="text/csv"
+#)
 
 # ----------- Footer -----------
 st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True)
