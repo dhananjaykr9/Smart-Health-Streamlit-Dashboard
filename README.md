@@ -88,8 +88,8 @@ streamlit_dashboard/
 │   ├── alerts.py                 → Threshold checking
 │   ├── auth.py                   → Auth logic
 │   ├── notifier.py               → Twilio/SMTP functions
-│   ├── firebase_export.py        → Export functions (optional)
-│   └── daily_report.py           → Scheduled reporting (optional)
+│   ├── firebase_export.py        → Export functions
+│   └── daily_report.py           → Scheduled reporting (Not Integrated Now)
 │
 ├── pages/
 │   ├── 1_Vitals.py               → Real-time dashboard
@@ -138,19 +138,7 @@ pip install streamlit firebase-admin plotly streamlit-autorefresh twilio
 streamlit run streamlit_dashboard/Home.py
 ```
 
-✅ Add your Firebase credentials in `.streamlit/secrets.toml` or via Streamlit Cloud UI.
-
----
-
-## 📸 Screenshots
-
-| Module           | Preview                             |
-| ---------------- | ----------------------------------- |
-| Login Page       | ![Login](screenshots/login.png)     |
-| Dashboard Charts | ![Vitals](screenshots/charts.png)   |
-| Alert Popup      | ![Alert](screenshots/alert.png)     |
-| History Table    | ![History](screenshots/history.png) |
-
+ Add your Firebase credentials in `.streamlit/secrets.toml` 
 ---
 
 ## 📤 Alerts & Notifications
@@ -173,7 +161,7 @@ Use the sidebar slider to view data for the last **N hours** dynamically. Data u
 
 * Firebase authentication for login
 * Firebase rules restrict access per user
-* Secrets are securely stored in `.streamlit/secrets.toml` or Streamlit Cloud Secrets Manager
+* Secrets are securely stored in `.streamlit/secrets.toml`
 
 ---
 
@@ -234,6 +222,5 @@ Feel free to fork the repo, raise issues, or contribute. For discussions, reach 
 ---
 
 ⭐ **If you like this project, please give it a star!**
-📄 Licensed under the [MIT License](LICENSE)
 
 ---
