@@ -222,5 +222,6 @@ Feel free to fork the repo, raise issues, or contribute. For discussions, reach 
 ---
 
 ⭐ **If you like this project, please give it a star!**
+📄 Licensed under the [MIT License](LICENSE)
 
 ---
