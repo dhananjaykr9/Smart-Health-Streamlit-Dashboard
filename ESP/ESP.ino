@@ -5,14 +5,14 @@
 #include <time.h>
 
 // Wi-Fi credentials
-#define WIFI_SSID "Believer"
-#define WIFI_PASSWORD "12345678d"
+#define WIFI_SSID "WIFI_Name"
+#define WIFI_PASSWORD "WIFI_Password"
 
 // Firebase credentials
-#define API_KEY "AIzaSyAsWVMpmcmj_HkRAsbOmHMkE4rpRS-4rrg"
-#define DATABASE_URL "https://patient-health-1cdb3-default-rtdb.firebaseio.com"
-#define USER_EMAIL "kharkar1@gmail.com"
-#define USER_PASSWORD "123456"
+#define API_KEY "YOUR_API_KEY"
+#define DATABASE_URL "YOUR_DATABASE_URL"
+#define USER_EMAIL "YOUR_FIREBASE_EMIAL"
+#define USER_PASSWORD "EMAIL_PASSWORD"
 
 // DS18B20 setup
 #define ONE_WIRE_BUS 4
