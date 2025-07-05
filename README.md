@@ -115,9 +115,11 @@ streamlit_dashboard/
 Use simulated random values:
 
 ```cpp
-int heartRate = random(60, 130);
-float temp = random(360, 390) / 10.0;
-int spo2 = random(91, 100);
+int HeartRate = random(60, 120);
+int Sp02 = random(90,100);
+float BodyTemp = random(360, 390) / 10;
+float RoomTemp = random(250, 320) / 10.0;
+int Humidity = random(30,70);
 ```
 
 Firebase path:
